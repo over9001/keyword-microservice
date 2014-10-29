@@ -9,6 +9,7 @@ exports.server = server = http.createServer(function(request,response){
 
     //var keywordsIndex = {};
     var keywords = [];
+    var keywordsO = {};
     var words = {};
 
     var ignore = {'':'ignore','the':'ignore','a':'ignore','and':'ignore','on':'ignore','is':'ignore','of':'ignore','to':'ignore'};
@@ -37,22 +38,25 @@ exports.server = server = http.createServer(function(request,response){
 
      	for (word in words){
      		//if(!ignoreWord(word)){
-     			ignore[word] || keywords.push([word,words[word]]);
+     			(ignore[word] || words[word] <= 3 || keywords.push({ word : word , instances : words[word]}));
+     			//(ignore[word] || words[word] <= 3 || (keywordsO[word] = words[word]));
      		//}
      	};
      	//Need to sort this list so that most frequent terms come first
      	keywords.sort(function (a, b) {
-  			if (a[1] < b[1]) {
+  			if (a.instances < b.instances) {
    			 return 1;
   			}
-  			if (a[1] > b[1]) {
+  			if (a.instances > b.instances) {
   			  return -1;
   			}
   			// a must be equal to b
  			return 0;
 		});
 
-    	response.write(JSON.stringify(keywords));
+    	//response.write(JSON.stringify(keywords));
+    	keywordsO = {keywords : keywords};
+    	response.write(JSON.stringify(keywordsO));
         //response.write(query.array);
         response.end();
     }
