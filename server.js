@@ -11,6 +11,11 @@ exports.server = server = http.createServer(function(request,response){
     var keywords = [];
     var words = {};
 
+    var ignore = {'':'ignore','the':'ignore','a':'ignore','and':'ignore','on':'ignore','is':'ignore','of':'ignore','to':'ignore'};
+    var ignoreWords = function(word){
+    	ignore[word];
+    };
+
     response.writeHead(200, {
             'Content-Type': 'text',
         });
@@ -25,12 +30,16 @@ exports.server = server = http.createServer(function(request,response){
     	//after getting data in, strip it of special characters and simple words
     	//Split on spaces
     	//loop over split text, increment or add word to array if it doesn't exist
-     	query.array.split(/[\s*\.*\,\;\+?\#\|:\-\/\\\[\]\(\)\{\}$%&0-9*]/).map( function(k,v){ words||(words={});words[k.toLowerCase()]++||(words[k.toLowerCase()]=1); });
+     	query.array.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g," ").split(/[\s*\.*\,\;\+?\#\|:\-\/\\\[\]\(\)\{\}\"\'$%&0-9*]/).map( function(k,v){words[k.toLowerCase()]++||(words[k.toLowerCase()]=1); });
 
      	//keywordsIndex = query.array;
      	//console.log(words);
 
-     	for (word in words){keywords.push([word,words[word]]);};
+     	for (word in words){
+     		//if(!ignoreWord(word)){
+     			ignore[word] || keywords.push([word,words[word]]);
+     		//}
+     	};
      	//Need to sort this list so that most frequent terms come first
      	keywords.sort(function (a, b) {
   			if (a[1] < b[1]) {
