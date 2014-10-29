@@ -1,11 +1,6 @@
-simplest-heroku-node-app
-========================
+Keywords Microservice
+=====================
 
-An extremely simple boilerplate for templating quick apps on Heroku using Node.
+TDD microservice goodness!
 
-Intro
------
-
-This will quickly kick-start your app that you want to deploy to Heroku using Node.
-
-Just clone the repository and run heroku create.
+Right now: Takes an array of strings, returns an array of keywords.
